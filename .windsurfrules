@@ -1,0 +1,92 @@
+# Windsurf Rules for This Project
+
+Hi! This file explains what this project is, what tech it uses, and how to run it. It’s written for a smart STEM‑talented 12‑year‑old who is just starting their programming journey. You’ve got this!
+
+## Project Purpose (What are we building?)
+We’re building a friendly, modern website for a custom T‑shirt shop called "VADA". There are two parts right now:
+
+- Root website (simple):
+  - Files: `index.html`, `styles.css`, `script.js`
+  - Purpose: A beautiful landing page with moving clouds, a hero section, featured products, and a fake cart counter.
+  - Good for learning HTML (structure), CSS (design), and JavaScript (interactivity).
+
+- React app (more advanced):
+  - Folder: `vada-tshirt-shop/`
+  - Files: `src/App.jsx`, `src/main.jsx`, `src/App.css`, plus a `README.md`
+  - Purpose: A more powerful version using React (a JavaScript library for building interactive UIs). It makes it easier to grow the site in the future.
+
+The project will grow over time. We’ll start simple and add features step by step.
+
+## Technologies (What tools are used?)
+- HTML5 — the skeleton of the page (tags like `<header>`, `<section>`, etc.).
+- CSS3 — the style and animations (colors, fonts, clouds, layout).
+- JavaScript (Vanilla JS) — small behaviors like smooth scrolling and updating the cart counter.
+- React 18 (inside `vada-tshirt-shop/`) — builds UI with components (reusable pieces), great for bigger apps.
+- Vite (inside `vada-tshirt-shop/`) — a fast dev server and build tool for React apps.
+
+## How to Run (Step‑by‑step)
+You have two ways to view the site. Pick one or try both.
+
+1) Run the simple root website (no installs needed)
+- Option A: Double‑click `index.html` to open it in your browser. Done!
+- Option B (better dev experience): Use a live server (for example, the VS Code "Live Server" extension) so changes reload instantly.
+
+2) Run the React app (needs Node and npm)
+- Install Node.js (version 18 or newer is recommended) from https://nodejs.org
+- Open a terminal in the `vada-tshirt-shop/` folder
+- Run:
+  - `npm install`  — downloads dependencies
+  - `npm run dev`  — starts the dev server
+- Open the URL shown in the terminal (usually http://localhost:5173)
+
+Tip: If something doesn’t work, read the messages in the terminal carefully; they often tell you what to fix.
+
+## Project Structure (What’s where?)
+- `/index.html` — main HTML page for the simple site
+- `/styles.css` — styles (colors, layout, cloud animation)
+- `/script.js` — interactivity (smooth scrolling, cart counter, small UI effects)
+- `/vada-tshirt-shop/` — React project
+  - `/src/App.jsx` — main React component (the page layout)
+  - `/src/main.jsx` — React entry point (connects React to the page)
+  - `/src/App.css` — styles for the React app
+  - `/README.md` — instructions for the React app
+
+## How Things Work (In simple terms)
+- HTML puts blocks on the page (like LEGO bricks).
+- CSS paints and arranges the blocks (colors, sizes, animations).
+- JavaScript makes things move or react when you click or scroll.
+- React lets you build with components — small pieces (like a product card) that you can reuse and combine.
+
+## Coding Tips for You
+- Keep names clear: `addToCart`, `product-card`, `header`, etc.
+- Make small changes often; test in the browser.
+- Use comments to explain “why,” not only “what”.
+- Learn by tweaking values (like colors or animation times) and see what changes.
+- Don’t worry if you don’t understand everything at once — learning code is like learning a new superpower.
+
+## How We Can Grow This Project
+- Real product data: load from a JSON file or a small API.
+- Real cart: store items, quantities, and a total price.
+- Product page: show details, images, and sizes.
+- Customizer: upload an image or pick colors, then preview on the shirt.
+- Deploy online: publish with Netlify, Vercel, or GitHub Pages so friends can see it.
+
+## Windows Setup Notes (Helpful reminders)
+- If you install Node.js, close and re‑open your terminal after installation.
+- If `npm run dev` fails, try `npm install` again and check your internet connection.
+- Use a modern browser (Chrome, Edge, or Firefox) for best results.
+
+## Mini Glossary
+- Dependency: a package of code your project uses (installed by `npm install`).
+- Dev server: a program that serves your site locally and reloads on changes.
+- Component: a reusable building block in React (like a product card).
+- Repository (repo): the folder of your project that can be tracked by Git.
+
+## For Future AI Helpers (Guidance for assistants)
+- Keep explanations short, friendly, and correct. Prefer examples and tiny steps.
+- When suggesting changes, point to exact files and lines when possible.
+- Favor simple, readable code over clever tricks.
+- Offer “why it works” explanations, not just code dumps.
+- Provide safe copy‑paste snippets and mention where to put them.
+
+Have fun building! Each line of code you write is another level up. 🚀

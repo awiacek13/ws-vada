@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WS VADA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="clouds">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+  </div>
+
+  <header>
+    <nav>
+      <a href="index.html#home" class="logo-cloud" aria-label="WS VADA">
+        <span class="logo-text">WS VADA</span>
+        <span class="puff puff-1"></span>
+        <span class="puff puff-2"></span>
+        <span class="puff puff-3"></span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html#home" data-i18n="nav.home">Home</a>
+        <a href="shop.html" class="active" data-i18n="nav.shop">Shop</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </div>
+      <a href="cart.html" class="cart-icon" aria-label="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+        <span class="cart-label" data-i18n="cart.label">cart</span>
+      </a>
+      <div class="lang-switcher" aria-label="Language Switcher">
+        <button class="lang-btn" data-lang="pl" title="Polski" aria-label="Polski">🇵🇱</button>
+        <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇺🇸</button>
+      </div>
+      <div class="currency-switcher" aria-label="Currency Switcher">
+        <button class="curr-btn" data-curr="USD" title="US Dollar">USD</button>
+        <button class="curr-btn" data-curr="EUR" title="Euro">EUR</button>
+        <button class="curr-btn" data-curr="PLN" title="Polski Złoty">PLN</button>
+      </div>
+    </nav>
+  </header>
+
+  <main style="padding-top: 140px;">
+    <section class="featured">
+      <div class="shop-controls" style="max-width:1000px;margin:0 auto 1rem;display:flex;justify-content:flex-end;gap:.5rem;"></div>
+      <div class="filters-banner" id="filtersBanner" role="button" tabindex="0" data-i18n="filters.title">Filtry</div>
+      <div class="filters-quick" id="filtersQuick">
+        <div class="opt"><label><input type="checkbox" value="official"> <span data-i18n="filters.categories.official">VADA official</span></label></div>
+        <div class="opt"><label><input type="checkbox" value="music"> <span data-i18n="filters.categories.music">muzyka</span></label></div>
+        <div class="opt"><label><input type="checkbox" value="movie"> <span data-i18n="filters.categories.movie">film</span></label></div>
+        <div class="opt"><label><input type="checkbox" value="kids"> <span data-i18n="filters.categories.kids">dzieci</span></label></div>
+        <div class="opt"><label><input type="checkbox" value="sports"> <span data-i18n="filters.categories.sports">sport</span></label></div>
+        <div class="opt"><label><input type="checkbox" value="streetwear"> <span data-i18n="filters.categories.streetwear">streetwear</span></label></div>
+        <div class="opt"><label><input type="checkbox" value="meme"> <span data-i18n="filters.categories.meme">meme</span></label></div>
+        <div style="margin-top:0.6rem; text-align:right;">
+          <button class="curr-btn" id="quickSave" data-i18n="filters.save">Zapisz filtry</button>
+        </div>
+      </div>
+      <h2 data-i18n="shop.title">Shop</h2>
+      <div class="product-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>WS|VADA</h3>
+        <p data-i18n="footer.tagline">Custom t-shirts made with love</p>
+      </div>
+      <div class="footer-section">
+        <h4 data-i18n="footer.quick">Quick Links</h4>
+        <a href="index.html#home" data-i18n="nav.home">Home</a>
+        <a href="shop.html" class="active" data-i18n="nav.shop">Shop</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </div>
+      <div class="footer-section">
+        <h4 data-i18n="footer.contact">Contact Us</h4>
+        <p>Email: <a href="mailto:adam@wsvada.shop" style="color: inherit; text-decoration: none;">adam@wsvada.shop</a></p>
+        <p>Email: <a href="mailto:gabriel@wsvada.shop" style="color: inherit; text-decoration: none;">gabriel@wsvada.shop</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer.rights">© 2025 WS|VADA. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

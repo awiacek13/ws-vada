@@ -1,0 +1,33 @@
+# Root ignores
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node/Front-end
+node_modules/
+dist/
+build/
+.tmp/
+
+# Vite
+.vite/
+
+# React app subproject
+vada-tshirt-shop/node_modules/
+vada-tshirt-shop/dist/
+vada-tshirt-shop/.vite/
+
+# Local dev tooling
+.env.local
+.env.*.local
+
+# OS/Editor
+*.swp
+.idea/
+.vscode/
+
+# Images cache or generated assets (keep real assets in repo)
+assets/**/*.tmp
