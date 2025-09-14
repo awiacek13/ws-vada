@@ -7,22 +7,24 @@ document.addEventListener('DOMContentLoaded', function() {
             nav: { home: 'Home', shop: 'Shop', contact: 'Contact' },
             hero: {
                 title: 'Custom T-Shirts Made Just For You',
-                subtitle: 'Express yourself with awesome T-shirts',
+                subtitle: 'T-shirts made with love',
                 cta: 'Shop Now'
             },
-            featured: { title: 'Featured Products' },
+            featured: { title: 'Bestsellers' },
             currency: { USD: 'US Dollar', EUR: 'Euro', PLN: 'Polish Złoty' },
             product: {
                 classic: 'Classic Tee',
                 premium: 'Premium Tee',
 
                 music: 'Music Tee',
+                metalica: 'Metalica T-shirt',
                 olivia: 'T-Shirt Olivia Rodrigo-GUTS',
                 minecraft: 'Minecraft kids T-shirt',
                 meme: 'Meme Tee',
                 basketball: 'Basketball Tee',
                 football: 'Football Tee',
-                official: 'VADA Official Tee'
+                official: 'VADA Official Tee',
+                london: 'London T-shirt'
             },
             button: { add: 'Add to Cart' },
             footer: { quick: 'Quick Links', contact: 'Contact Us', rights: '© 2025 VADA. All rights reserved.', tagline: 'Custom t-shirts made with love' },
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             contact: { title: 'Contact' },
             // Contact page intro
             contact_intro: { text: "Got questions? We'd love to hear from you!" },
-            modal: { lowest30: 'Lowest price in 30 days' },
+            modal: { lowest30: 'Lowest price in 30 days', choose_size: 'Choose size' },
             cart: {
                 label: 'cart',
                 empty: 'Your cart is empty',
@@ -65,22 +67,24 @@ document.addEventListener('DOMContentLoaded', function() {
             nav: { home: 'Start', shop: 'Sklep', contact: 'Kontakt' },
             hero: {
                 title: 'Koszulki tworzone specjalnie dla Ciebie',
-                subtitle: 'Wyraż siebie zarąbistymi koszulkami',
+                subtitle: 'Koszulki tworzone z serca',
                 cta: 'Do sklepu'
             },
-            featured: { title: 'Polecane produkty' },
+            featured: { title: 'Bestsellery' },
             currency: { USD: 'Dolar amerykański', EUR: 'Euro', PLN: 'Polski złoty' },
             product: {
                 classic: 'Klasyczny T‑shirt',
                 premium: 'T‑shirt Premium',
                 vneck: 'T‑shirt V‑neck',
                 music: 'T‑shirt Muzyka',
+                metalica: 'T‑shirt Metalica',
                 olivia: 'T‑shirt Olivia Rodrigo – GUTS',
                 minecraft: 'Minecraft dziecięcy T‑shirt',
                 meme: 'T‑shirt Meme',
                 basketball: 'T‑shirt Koszykówka',
                 football: 'T‑shirt Piłka nożna',
-                official: 'VADA Official T‑shirt'
+                official: 'VADA Official T‑shirt',
+                london: 'T‑shirt London'
             },
             button: { add: 'Dodaj do koszyka' },
             footer: { quick: 'Szybkie linki', contact: 'Kontakt', rights: '© 2025 VADA. Wszelkie prawa zastrzeżone.', tagline: 'Koszulki tworzone z sercem' },
@@ -104,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
             contact: { title: 'Kontakt' },
             // Contact page intro
             contact_intro: { text: 'Masz pytania? Chętnie pomożemy!' },
-            modal: { lowest30: 'Najniższa cena z 30 dni' },
+            modal: { lowest30: 'Najniższa cena z 30 dni', choose_size: 'Wybierz rozmiar' },
             cart: {
                 label: 'koszyk',
                 empty: 'Twój koszyk jest pusty',
@@ -121,12 +125,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Define: Populate shop page with products if grid exists and is empty (call later)
-    function initShopProducts(){
-        const grid = document.querySelector('.product-grid');
-        if (!grid) return;
-        if (grid.children.length > 0) return;
-        const items = [
+    // Build the product catalog once, to reuse across pages
+    function buildCatalog(){
+        return [
+            {
+                titleKey: 'product.metalica',
+                fallback: 'Metalica T-shirt',
+                usd: 17.5,
+                pln: 70,
+                discount: 10,
+                bg: '#f3f6ff',
+                cats: ['music'],
+                images: [
+                    'assets/unisex-heavy-cotton-tee (4).jpg',
+                    'assets/unisex-heavy-cotton-tee (5).jpg',
+                    'assets/unisex-heavy-cotton-tee (6).jpg',
+                    'assets/unisex-heavy-cotton-tee (7).jpg'
+                ]
+            },
+            {
+                titleKey: 'product.london',
+                fallback: 'London T-shirt',
+                usd: 17.5,
+                pln: 70,
+                discount: 10,
+                bg: '#ffffff',
+                cats: ['streetwear'],
+                images: [
+                    'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (3).jpg',
+                    'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear.jpg',
+                    'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (1).jpg',
+                    'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (2).jpg'
+                ]
+            },
             {
                 titleKey: 'product.olivia',
                 fallback: 'T-Shirt Olivia Rodrigo-GUTS',
@@ -155,38 +186,48 @@ document.addEventListener('DOMContentLoaded', function() {
                     'assets/kids-heavy-cotton-tee (1).jpg',
                     'assets/kids-heavy-cotton-tee (3).jpg'
                 ]
-            },
-        ];
-        const lang = getCurrentLang();
-        const dict = translations[lang] || translations.en;
-        // small helper to preload an image and resolve true/false
-        const preload = (src) => new Promise(res=>{ const im=new Image(); im.onload=()=>res(true); im.onerror=()=>res(false); im.src=src; });
-        items.forEach(async it => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            if (Array.isArray(it.cats)) card.setAttribute('data-cats', it.cats.join(','));
-            if (Array.isArray(it.images)) card.setAttribute('data-images', JSON.stringify(it.images));
-            card.innerHTML = `
-                <div class="product-image" style="${Array.isArray(it.images) && it.images[0] ? `background-color:#f3f6ff;` : `background-color:${it.bg};`}"
-                ></div>
-                <h3 data-i18n="${it.titleKey}">${getNested(dict, it.titleKey) || it.fallback}</h3>
-                <p class="price" data-price-usd="${it.usd}" data-price-pln="${it.pln}" ${it.discount?`data-discount="${it.discount}"`:''}>$${it.usd.toFixed(2)}</p>
-                <button class="add-to-cart" data-i18n="button.add">${getNested(dict,'button.add')||'Add to Cart'}</button>
-            `;
-            if (it.discount && Number(it.discount) > 0) {
-                const badge = document.createElement('div');
-                badge.className = 'badge-discount';
-                badge.textContent = `-${Number(it.discount)}%`;
-                const imgDiv = card.querySelector('.product-image');
-                imgDiv.style.position = 'relative';
-                badge.style.position = 'absolute';
-                badge.style.top = '8px';
-                badge.style.left = '8px';
-                imgDiv.appendChild(badge);
             }
-            grid.appendChild(card);
-            // Load the first existing image from the list; if none found, show gradient (no text)
+        ];
+    }
+
+    // Reusable card renderer
+    function renderProductCard(grid, it, dict){
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        if (Array.isArray(it.cats)) card.setAttribute('data-cats', it.cats.join(','));
+        if (Array.isArray(it.images)) card.setAttribute('data-images', JSON.stringify(it.images));
+        if (it.titleKey) card.setAttribute('data-title-key', it.titleKey);
+        card.innerHTML = `
+            <div class="product-image" style="${Array.isArray(it.images) && it.images[0] ? `background-color:#f3f6ff;` : `background-color:${it.bg};`}"
+            ></div>
+            <h3 data-i18n="${it.titleKey}">${getNested(dict, it.titleKey) || it.fallback}</h3>
+            <p class="price" data-price-usd="${it.usd}" data-price-pln="${it.pln}" ${it.discount?`data-discount="${it.discount}"`:''}>$${Number(it.usd||0).toFixed(2)}</p>
+            <div class="card-size-label" data-i18n="modal.choose_size">${(translations[getCurrentLang()]?.modal?.choose_size) || 'Choose size'}</div>
+            <div class="card-sizes">
+                <button class="size-btn" data-size="S">S</button>
+                <button class="size-btn" data-size="M">M</button>
+                <button class="size-btn" data-size="L">L</button>
+                <button class="size-btn" data-size="XL">XL</button>
+            </div>
+            <div class="card-thumbs"></div>
+            <button class="add-to-cart" data-i18n="button.add">${getNested(dict,'button.add')||'Add to Cart'}</button>
+        `;
+        if (it.discount && Number(it.discount) > 0) {
+            const badge = document.createElement('div');
+            badge.className = 'badge-discount';
+            badge.textContent = `-${Number(it.discount)}%`;
             const imgDiv = card.querySelector('.product-image');
+            imgDiv.style.position = 'relative';
+            badge.style.position = 'absolute';
+            badge.style.top = '8px';
+            badge.style.left = '8px';
+            imgDiv.appendChild(badge);
+        }
+        grid.appendChild(card);
+        // Image loading behavior (first existing) or gradient fallback; also build card thumbnails
+        const imgDiv = card.querySelector('.product-image');
+        const preload = (src) => new Promise(res=>{ const im=new Image(); im.onload=()=>res(true); im.onerror=()=>res(false); im.src=src; });
+        (async () => {
             if (Array.isArray(it.images) && it.images.length){
                 let chosen = null;
                 for (const src of it.images){
@@ -199,59 +240,121 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     imgDiv.style.background = 'linear-gradient(135deg, var(--light-blue), var(--light-pink))';
                 }
+                // Thumbs
+                try {
+                    const thumbsWrap = card.querySelector('.card-thumbs');
+                    thumbsWrap.innerHTML = '';
+                    const loaded = [];
+                    for (const src of it.images){ if (await preload(src)) loaded.push(src); }
+                    loaded.slice(0,4).forEach(src => {
+                        const th = document.createElement('button');
+                        th.className = 'thumb';
+                        th.type = 'button';
+                        th.style.backgroundImage = `url('${src}')`;
+                        th.addEventListener('click', (ev)=>{ ev.stopPropagation(); imgDiv.style.backgroundImage = `url('${src}')`; });
+                        thumbsWrap.appendChild(th);
+                    });
+                } catch {}
             }
-            // Inline mini-controls for cycling images on the card
-            try {
-                const imgs = Array.isArray(it.images) ? it.images.slice() : [];
-                if (imgs.length > 1) {
-                    card.dataset.imgIndex = '0';
-                    const controls = document.createElement('div');
-                    controls.className = 'card-img-controls';
-                    controls.style.position = 'absolute';
-                    controls.style.top = '8px';
-                    controls.style.right = '8px';
-                    controls.style.display = 'flex';
-                    controls.style.gap = '6px';
-                    controls.style.zIndex = '2';
-                    const mkBtn = (cls, txt) => {
-                        const b = document.createElement('button');
-                        b.className = cls;
-                        b.type = 'button';
-                        b.textContent = txt;
-                        b.style.padding = '2px 6px';
-                        b.style.borderRadius = '8px';
-                        b.style.border = '1px solid rgba(0,0,0,0.15)';
-                        b.style.background = 'rgba(255,255,255,0.8)';
-                        b.style.cursor = 'pointer';
-                        b.style.fontSize = '12px';
-                        b.style.backdropFilter = 'blur(3px)';
-                        return b;
-                    };
-                    const prev = mkBtn('img-prev','‹');
-                    const next = mkBtn('img-next','›');
-                    controls.appendChild(prev);
-                    controls.appendChild(next);
-                    // position container relative to image area
-                    // imgDiv already defined above
-                    imgDiv.style.position = 'relative';
-                    imgDiv.appendChild(controls);
-                    function show(idx){
-                        const i = ((idx % imgs.length) + imgs.length) % imgs.length;
-                        card.dataset.imgIndex = String(i);
-                        imgDiv.style.backgroundImage = `url('${imgs[i]}')`;
-                        imgDiv.style.backgroundSize = 'cover';
-                        imgDiv.style.backgroundPosition = 'center';
-                    }
-                    prev.addEventListener('click', (ev)=>{ ev.stopPropagation(); show(Number(card.dataset.imgIndex||'0')-1); });
-                    next.addEventListener('click', (ev)=>{ ev.stopPropagation(); show(Number(card.dataset.imgIndex||'0')+1); });
+        })();
+        // Optional mini-controls for cycling images on the card
+        try {
+            const imgs = Array.isArray(it.images) ? it.images.slice() : [];
+            if (imgs.length > 1) {
+                card.dataset.imgIndex = '0';
+                const controls = document.createElement('div');
+                controls.className = 'card-img-controls';
+                controls.style.position = 'absolute';
+                controls.style.top = '8px';
+                controls.style.right = '8px';
+                controls.style.display = 'flex';
+                controls.style.gap = '6px';
+                controls.style.zIndex = '2';
+                const mkBtn = (cls, txt) => {
+                    const b = document.createElement('button');
+                    b.className = cls;
+                    b.type = 'button';
+                    b.textContent = txt;
+                    b.style.padding = '2px 6px';
+                    b.style.borderRadius = '8px';
+                    b.style.border = '1px solid rgba(0,0,0,0.15)';
+                    b.style.background = 'rgba(255,255,255,0.8)';
+                    b.style.cursor = 'pointer';
+                    b.style.fontSize = '12px';
+                    b.style.backdropFilter = 'blur(3px)';
+                    return b;
+                };
+                const prev = mkBtn('img-prev','‹');
+                const next = mkBtn('img-next','›');
+                controls.appendChild(prev);
+                controls.appendChild(next);
+                imgDiv.style.position = 'relative';
+                imgDiv.appendChild(controls);
+                function show(idx){
+                    const i = ((idx % imgs.length) + imgs.length) % imgs.length;
+                    card.dataset.imgIndex = String(i);
+                    imgDiv.style.backgroundImage = `url('${imgs[i]}')`;
+                    imgDiv.style.backgroundSize = 'cover';
+                    imgDiv.style.backgroundPosition = 'center';
                 }
-            } catch {}
-            // Make the whole card clickable except the Add to Cart button
-            card.addEventListener('click', (e) => {
-                if (e.target.closest('.add-to-cart')) return;
-                openProductModalFromCard(card);
+                prev.addEventListener('click', (ev)=>{ ev.stopPropagation(); show(Number(card.dataset.imgIndex||'0')-1); });
+                next.addEventListener('click', (ev)=>{ ev.stopPropagation(); show(Number(card.dataset.imgIndex||'0')+1); });
+            }
+        } catch {}
+        // Card size selection controls
+        (function initCardSizes(){
+            const sizes = card.querySelector('.card-sizes');
+            if (!sizes) return;
+            card.dataset.size = 'M';
+            const update = ()=> sizes.querySelectorAll('.size-btn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-size')===card.dataset.size));
+            update();
+            sizes.addEventListener('click', (ev)=>{
+                ev.stopPropagation();
+                const btn = ev.target.closest('.size-btn'); if (!btn) return;
+                card.dataset.size = btn.getAttribute('data-size') || 'M';
+                update();
             });
+        })();
+
+        // Make the whole card clickable except the Add to Cart button
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.add-to-cart')) return;
+            openProductModalFromCard(card);
         });
+        return card;
+    }
+
+    // Sales tracking in localStorage
+    function getSalesMap(){
+        try { return JSON.parse(localStorage.getItem('vada_sales') || '{}'); } catch { return {}; }
+    }
+    function saveSalesMap(map){
+        localStorage.setItem('vada_sales', JSON.stringify(map || {}));
+    }
+    function incrementSalesByKey(titleKey){
+        if (!titleKey) return;
+        const map = getSalesMap();
+        map[titleKey] = (map[titleKey] || 0) + 1;
+        saveSalesMap(map);
+    }
+    function incrementSalesByTitle(title){
+        if (!title) return;
+        const map = getSalesMap();
+        map[title] = (map[title] || 0) + 1;
+        saveSalesMap(map);
+    }
+
+    // Define: Populate shop page with products if grid exists and is empty (call later)
+    function initShopProducts(){
+        // Only on shop page (filters banner exists only there)
+        if (!document.getElementById('filtersBanner')) return;
+        const grid = document.querySelector('.product-grid');
+        if (!grid) return;
+        if (grid.children.length > 0) return;
+        const items = buildCatalog();
+        const lang = getCurrentLang();
+        const dict = translations[lang] || translations.en;
+        items.forEach(it => renderProductCard(grid, it, dict));
         // Notify others that products are ready (filters, etc.)
         try { window.dispatchEvent(new Event('products-ready')); } catch {}
         // Translations/prices/highlights will be applied after language/currency init
@@ -497,6 +600,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const lang = btn.getAttribute('data-lang');
                 localStorage.setItem('vada_lang', lang);
                 applyTranslations(lang);
+                // Re-render home bestsellers after language switch
+                setTimeout(() => initHomeBestsellers(4), 0);
             });
         });
     }
@@ -506,6 +611,8 @@ document.addEventListener('DOMContentLoaded', function() {
     ensureDefaultCurrency(getCurrentLang());
     // Build products for Shop page after language/currency are ready
     initShopProducts();
+    // Render bestsellers on Home page (top 4)
+    initHomeBestsellers(4);
     // Ensure prices and premium highlighting reflect current settings
     updatePrices(getCurrentLang());
     highlightPremiumPricesDOM();
@@ -525,7 +632,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <h3 class="modal-title">Product</h3>
                             <div class="modal-price"></div>
                             <p class="modal-lowest">Najniższa cena z 30 dni: <span class="lowest-price"></span></p>
-                            <div class="modal-sizes" style="display:none; gap:.4rem; margin:.6rem 0;">
+                            <div class="modal-size-label" data-i18n="modal.choose_size">Choose size</div>
+                            <div class="modal-sizes" style="gap:.4rem; margin:.6rem 0;">
                                 <button class="size-btn" data-size="S">S</button>
                                 <button class="size-btn" data-size="M">M</button>
                                 <button class="size-btn" data-size="L">L</button>
@@ -550,6 +658,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const usdAttr = priceEl ? parseFloat(priceEl.getAttribute('data-price-usd')) : 0;
         const lowest = priceEl?.getAttribute('data-lowest30') || '';
         const img = card.querySelector('.product-image');
+        // persist title key for sales tracking
+        const key = card.getAttribute('data-title-key') || '';
+        modal.dataset.productKey = key;
         modal.querySelector('.modal-title').textContent = title;
         modal.querySelector('.modal-price').innerHTML = priceHtml;
         // translated label
@@ -649,6 +760,28 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.dataset.productUsd = String(usdAttr || 0);
         modal.style.display = 'flex';
     }
+
+    // Render bestsellers into Home page featured grid (limit 4)
+    function initHomeBestsellers(limit = 4){
+        const homeFeatured = document.querySelector('#featured .product-grid');
+        if (!homeFeatured) return;
+        // Ensure we don't accidentally render shop items here twice
+        homeFeatured.innerHTML = '';
+        const catalog = buildCatalog();
+        const sales = getSalesMap();
+        // Rank by sales using titleKey if available; fallback to 0
+        const ranked = catalog
+            .map(it => ({ it, score: (it.titleKey && sales[it.titleKey]) ? sales[it.titleKey] : 0 }))
+            .sort((a,b) => b.score - a.score)
+            .slice(0, Math.max(0, limit))
+            .map(e => e.it);
+        const finalList = ranked.length ? ranked : catalog.slice(0, Math.max(0, limit));
+        const lang = getCurrentLang();
+        const dict = translations[lang] || translations.en;
+        finalList.forEach(it => renderProductCard(homeFeatured, it, dict));
+        // Ensure prices reflect current currency and styling after dynamic render
+        setTimeout(() => { try { updatePrices(getCurrentLang()); highlightPremiumPricesDOM(); } catch {} }, 0);
+    }
     function closeProductModal(){
         const modal = document.getElementById('productModal');
         if (modal) modal.style.display = 'none';
@@ -669,6 +802,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const name = `${base} (${size})`;
                 const usd = parseFloat(modal.dataset.productUsd || '0') || 0;
                 addItemToCart(name, usd);
+                // increment sales using saved product key and refresh bestsellers
+                const pkey = modal.dataset.productKey || '';
+                if (pkey) incrementSalesByKey(pkey);
+                setTimeout(() => initHomeBestsellers(4), 0);
+                // ensure discount formatting stays visible
+                setTimeout(() => { try { updatePrices(getCurrentLang()); highlightPremiumPricesDOM(); } catch {} }, 0);
                 closeProductModal();
             }
         }
@@ -808,13 +947,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const count = cart.reduce((sum, it) => sum + (it.qty || 1), 0);
         if (cartCount) cartCount.textContent = count;
     }
-    function addItemToCart(name, usd) {
+    function addItemToCart(name, usd, discountPct) {
         const cart = getCart();
         const idx = cart.findIndex(it => it.name === name);
         if (idx >= 0) {
             cart[idx].qty = (cart[idx].qty || 1) + 1;
+            // If discount provided and item had none, persist it
+            if (isFinite(discountPct)) {
+                cart[idx].discount = Number(discountPct) || 0;
+            }
         } else {
-            cart.push({ name, usd: Number(usd) || 0, qty: 1 });
+            cart.push({ name, usd: Number(usd) || 0, qty: 1, discount: isFinite(discountPct) ? (Number(discountPct) || 0) : 0 });
         }
         saveCart(cart);
         updateCartCount();
@@ -829,10 +972,20 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function(e) {
             e.stopPropagation();
             const card = this.closest('.product-card');
-            const productName = card ? (card.querySelector('h3')?.textContent || 'Item') : 'Item';
+            const productNameBase = card ? (card.querySelector('h3')?.textContent || 'Item') : 'Item';
             const priceEl = card ? card.querySelector('.price') : null;
             const usd = priceEl ? parseFloat(priceEl.getAttribute('data-price-usd')) : 0;
-            addItemToCart(productName, usd);
+            const discountPct = priceEl ? parseFloat(priceEl.getAttribute('data-discount')) : 0;
+            const sizeSel = card ? (card.dataset.size || 'M') : 'M';
+            const productName = `${productNameBase} (${sizeSel})`;
+            addItemToCart(productName, usd, discountPct);
+            // increment sales for bestsellers
+            const key = card ? (card.getAttribute('data-title-key') || '') : '';
+            if (key) incrementSalesByKey(key);
+            // refresh home bestsellers
+            setTimeout(() => initHomeBestsellers(4), 0);
+            // ensure discount formatting stays visible
+            setTimeout(() => { try { updatePrices(getCurrentLang()); highlightPremiumPricesDOM(); } catch {} }, 0);
             if (cartCount) {
                 cartCount.style.transform = 'scale(1.3)';
                 setTimeout(() => { cartCount.style.transform = 'scale(1)'; }, 300);
@@ -849,10 +1002,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // Avoid triggering card click (modal)
         e.stopPropagation();
         const card = btn.closest('.product-card');
-        const productName = card ? (card.querySelector('h3')?.textContent || 'Item') : 'Item';
+        const productNameBase = card ? (card.querySelector('h3')?.textContent || 'Item') : 'Item';
         const priceEl = card ? card.querySelector('.price') : null;
         const usd = priceEl ? parseFloat(priceEl.getAttribute('data-price-usd')) : 0;
-        addItemToCart(productName, usd);
+        const discountPct = priceEl ? parseFloat(priceEl.getAttribute('data-discount')) : 0;
+        const sizeSel = card ? (card.dataset.size || 'M') : 'M';
+        const productName = `${productNameBase} (${sizeSel})`;
+        addItemToCart(productName, usd, discountPct);
+        // increment sales for bestsellers
+        const key = card ? (card.getAttribute('data-title-key') || '') : '';
+        if (key) incrementSalesByKey(key);
+        // refresh home bestsellers
+        setTimeout(() => initHomeBestsellers(4), 0);
+        // ensure discount formatting stays visible
+        setTimeout(() => { try { updatePrices(getCurrentLang()); highlightPremiumPricesDOM(); } catch {} }, 0);
         if (cartCount) {
             cartCount.style.transform = 'scale(1.3)';
             setTimeout(() => { cartCount.style.transform = 'scale(1)'; }, 300);
@@ -894,22 +1057,34 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span>${t.cart.total}</span>
                         </div>`;
             cart.forEach((item, idx) => {
-                const lineUSD = (item.usd || 0) * (item.qty || 1);
+                const qty = (item.qty || 1);
+                const unitUSD = (item.usd || 0);
+                const disc = Number(item.discount) || 0;
+                const unitUSDDisc = unitUSD * (disc > 0 ? (1 - disc/100) : 1);
+                const lineUSD = unitUSDDisc * qty;
                 subtotalUSD += lineUSD;
-                const priceMain = item.usd * info.rate;
-                const lineMain = lineUSD * info.rate;
                 const fmtMain = new Intl.NumberFormat(info.locale,{style:'currency',currency:info.code,minimumFractionDigits:2});
+                const priceMain = unitUSD * info.rate;
+                const priceNew = unitUSDDisc * info.rate;
+                const lineMain = lineUSD * info.rate;
+                const lineOld = (unitUSD * qty) * info.rate;
                 const isPremium = (item.name || '').toLowerCase().includes('premium');
+                const priceHtml = (disc > 0)
+                    ? `<span class="price-old">${fmtMain.format(priceMain)}</span><span class="price-new">${fmtMain.format(priceNew)}</span>`
+                    : `${fmtMain.format(priceMain)}`;
+                const lineHtml = (disc > 0)
+                    ? `<span class="price-old">${fmtMain.format(lineOld)}</span><span class="price-new">${fmtMain.format(lineMain)}</span>`
+                    : `${fmtMain.format(lineMain)}`;
                 html += `<div class="cart-row" data-idx="${idx}">
                             <span><input type="checkbox" class="sel"></span>
                             <span>${item.name}</span>
                             <span>
                               <button class="qty-dec" aria-label="dec">−</button>
-                              <span class="qty">${item.qty || 1}</span>
+                              <span class="qty">${qty}</span>
                               <button class="qty-inc" aria-label="inc">+</button>
                             </span>
-                            <span class="price${isPremium ? ' price-premium' : ''}">${fmtMain.format(priceMain)}</span>
-                            <span class="line${isPremium ? ' price-premium' : ''}">${fmtMain.format(lineMain)}</span>
+                            <span class="price${isPremium ? ' price-premium' : ''}">${priceHtml}</span>
+                            <span class="line${isPremium ? ' price-premium' : ''}">${lineHtml}</span>
                              <span><button class="remove-row" aria-label="remove">${lang==='pl'?'Usuń':'Remove'}</button></span>
                          </div>`;
             });
@@ -969,11 +1144,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     const info = getCurrencyInfo(curr);
                     const cart = getCart();
                     const item = cart[idx];
-                    const lineUSD = (item.usd||0)*(item.qty||1);
+                    const qty = item.qty || 1;
+                    const disc = Number(item.discount) || 0;
+                    const unitUSD = item.usd || 0;
+                    const unitUSDDisc = unitUSD * (disc > 0 ? (1 - disc/100) : 1);
+                    const lineUSD = unitUSDDisc * qty;
                     const fmt = new Intl.NumberFormat(info.locale,{style:'currency',currency:info.code,minimumFractionDigits:2});
                     const lineMain = lineUSD * info.rate;
-                    qtyEl.textContent = item.qty||1;
-                    lineEl.textContent = fmt.format(lineMain);
+                    const lineOld = (unitUSD * qty) * info.rate;
+                    qtyEl.textContent = qty;
+                    lineEl.innerHTML = (disc > 0)
+                        ? `<span class="price-old">${fmt.format(lineOld)}</span><span class="price-new">${fmt.format(lineMain)}</span>`
+                        : fmt.format(lineMain);
                 }
                 if (dec) dec.addEventListener('click', () => {
                     const cart = getCart();
