@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 button: 'Filters',
                 title: 'Filters',
                 save: 'Save filters',
-                clear: 'Clear',
+                clear: 'Clear filters',
                 categories: {
                     official: 'VADA official',
                     meme: 'meme',
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 button: 'Filtry',
                 title: 'Filtry',
                 save: 'Zapisz filtry',
-                clear: 'Wyczyść',
+                clear: 'Usuń filtry',
                 categories: {
                     official: 'VADA official',
                     meme: 'meme',
@@ -184,10 +184,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 images: [
                     'assets/kids-heavy-cotton-tee (2).jpg',
                     'assets/kids-heavy-cotton-tee (1).jpg',
-                    'assets/kids-heavy-cotton-tee (3).jpg'
+                    'assets/kids-heavy-cotton-tee.jpg'
                 ]
             }
         ];
+    }
+
+// Defensive: fix any legacy image filenames left in DOM (from cached builds)
+function fixLegacyImageFilenames(root=document){
+    const MAP = {
+        'assets/kids-heavy-cotton-tee (3).jpg': 'assets/kids-heavy-cotton-tee.jpg'
+    };
+    const repl = (url) => {
+        if (!url) return url;
+        try {
+            const unq = url.replace(/"|'/g,'');
+            for (const bad in MAP){
+                if (unq.includes(bad)) return unq.replace(bad, MAP[bad]);
+            }
+        } catch {}
+        return url;
+    };
+    // Fix <img src>
+    root.querySelectorAll('img[src]').forEach(img => {
+        const fixed = repl(img.getAttribute('src'));
+        if (fixed && fixed !== img.getAttribute('src')) img.setAttribute('src', fixed);
+    });
+    // Fix background-image styles on elements
+    root.querySelectorAll('*').forEach(el => {
+        const bg = el.style && el.style.backgroundImage;
+        if (bg && bg.includes('kids-heavy-cotton-tee (3).jpg')){
+            const fixed = repl(bg);
+            if (fixed) el.style.backgroundImage = fixed.startsWith('url(') ? fixed : `url('${fixed}')`;
+        }
+    });
+}
+
+    // Replace outdated/missing filenames to avoid 404s in older deployments
+    function normalizeImageList(arr){
+        if (!Array.isArray(arr)) return [];
+        return arr.map(src => {
+            if (typeof src !== 'string') return src;
+            if (src.includes('kids-heavy-cotton-tee (3).jpg')) return 'assets/kids-heavy-cotton-tee.jpg';
+            return src;
+        });
     }
 
     // Reusable card renderer
@@ -228,9 +268,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const imgDiv = card.querySelector('.product-image');
         const preload = (src) => new Promise(res=>{ const im=new Image(); im.onload=()=>res(true); im.onerror=()=>res(false); im.src=src; });
         (async () => {
-            if (Array.isArray(it.images) && it.images.length){
+            const imgsNorm = normalizeImageList(it.images);
+            if (Array.isArray(imgsNorm) && imgsNorm.length){
                 let chosen = null;
-                for (const src of it.images){
+                for (const src of imgsNorm){
                     if (await preload(src)) { chosen = src; break; }
                 }
                 if (chosen){
@@ -245,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const thumbsWrap = card.querySelector('.card-thumbs');
                     thumbsWrap.innerHTML = '';
                     const loaded = [];
-                    for (const src of it.images){ if (await preload(src)) loaded.push(src); }
+                    for (const src of imgsNorm){ if (await preload(src)) loaded.push(src); }
                     loaded.slice(0,4).forEach(src => {
                         const th = document.createElement('button');
                         th.className = 'thumb';
@@ -259,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })();
         // Optional mini-controls for cycling images on the card
         try {
-            const imgs = Array.isArray(it.images) ? it.images.slice() : [];
+            const imgs = Array.isArray(it.images) ? normalizeImageList(it.images.slice()) : [];
             if (imgs.length > 1) {
                 card.dataset.imgIndex = '0';
                 const controls = document.createElement('div');
@@ -425,9 +466,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // wire buttons
         const saveBtn = document.getElementById('saveFilters');
         const clearBtn = document.getElementById('clearFilters');
+        const quickClearBtn = document.getElementById('quickClear');
 
         toggleBtn.addEventListener('click', () => {
             panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+            quickClearBtn.style.display = (panel.style.display === 'block') ? 'block' : 'none';
         });
 
         if (saveBtn){
@@ -681,8 +724,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         thumbs.innerHTML = '';
         // Prefer per-product images from data-images (validate with preload to avoid 404s)
-        let images = [];
-        try { images = JSON.parse(card.getAttribute('data-images') || '[]'); } catch {}
+        const images = normalizeImageList((() => { try { return JSON.parse(card.getAttribute('data-images')||'[]'); } catch { return []; } })());
         const validImages = [];
         async function preload(src){
             return new Promise(resolve => {
@@ -874,6 +916,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
                 applyQuickFilters();
                 panel.classList.remove('show');
+            });
+        }
+        if (clearBtn){
+            clearBtn.addEventListener('click', () => {
+                // Uncheck all and clear saved
+                getChecks().forEach(cb => cb.checked = false);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                applyQuickFilters();
             });
         }
         // Apply filters on load as well

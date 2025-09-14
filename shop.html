@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WS VADA</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23a7c7e7'/%3E%3Ctext x='32' y='38' font-size='26' text-anchor='middle' fill='white' font-family='Arial, sans-serif'%3EV%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
@@ -61,7 +62,8 @@
         <div class="opt"><label><input type="checkbox" value="sports"> <span data-i18n="filters.categories.sports">sport</span></label></div>
         <div class="opt"><label><input type="checkbox" value="streetwear"> <span data-i18n="filters.categories.streetwear">streetwear</span></label></div>
         <div class="opt"><label><input type="checkbox" value="meme"> <span data-i18n="filters.categories.meme">meme</span></label></div>
-        <div style="margin-top:0.6rem; text-align:right;">
+        <div style="margin-top:0.6rem; display:flex; justify-content:space-between; align-items:center; gap:.4rem;">
+          <button class="curr-btn" id="quickClear" data-i18n="filters.clear">Usuń filtry</button>
           <button class="curr-btn" id="quickSave" data-i18n="filters.save">Zapisz filtry</button>
         </div>
       </div>

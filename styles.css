@@ -446,6 +446,27 @@ main h2[data-i18n="shop.title"] {
     background: #ffeaf3; /* light pink when opened */
 }
 
+/* Quick filters actions */
+.filters-quick #quickSave {
+    background: var(--baby-blue);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-weight: 800;
+    font-family: 'Chewy', 'Luckiest Guy', 'Bubblegum Sans', 'Baloo 2', system-ui, -apple-system, sans-serif;
+    box-shadow: 0 6px 16px rgba(152, 199, 255, 0.35);
+}
+.filters-quick #quickSave:hover { filter: brightness(1.05); }
+.filters-quick #quickClear {
+    background: #ffffff;
+    color: var(--text-dark);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-weight: 700;
+}
+
 .filters-quick .opt {
     display: flex;
     align-items: center;
