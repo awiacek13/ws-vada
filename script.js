@@ -470,7 +470,7 @@ function fixLegacyImageFilenames(root=document){
 
         toggleBtn.addEventListener('click', () => {
             panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
-            quickClearBtn.style.display = (panel.style.display === 'block') ? 'block' : 'none';
+            if (quickClearBtn) quickClearBtn.style.display = (panel.style.display === 'block') ? 'block' : 'none';
         });
 
         if (saveBtn){
@@ -908,8 +908,9 @@ function fixLegacyImageFilenames(root=document){
             const set = new Set(saved);
             getChecks().forEach(cb => { cb.checked = set.has(cb.value); });
         } catch {}
-        // Save button
+        // Save/Clear buttons (quick panel)
         const saveBtn = document.getElementById('quickSave');
+        const quickClear = document.getElementById('quickClear');
         if (saveBtn){
             saveBtn.addEventListener('click', () => {
                 const selected = getChecks().filter(cb => cb.checked).map(cb => cb.value);
@@ -918,8 +919,8 @@ function fixLegacyImageFilenames(root=document){
                 panel.classList.remove('show');
             });
         }
-        if (clearBtn){
-            clearBtn.addEventListener('click', () => {
+        if (quickClear){
+            quickClear.addEventListener('click', () => {
                 // Uncheck all and clear saved
                 getChecks().forEach(cb => cb.checked = false);
                 localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
