@@ -164,6 +164,15 @@ nav {
     padding: 1.5rem 5%;
     max-width: 1400px;
     margin: 0 auto;
+    gap: 0.75rem; /* add small gap so items don't touch when shrinking */
+}
+
+/* Right-side group: currency + language + cart */
+.nav-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto; /* push group to the right */
 }
 
 /* Language Switcher */
@@ -268,6 +277,8 @@ nav {
     overflow: visible;
     text-decoration: none;
     color: inherit;
+    flex: 0 1 auto; /* allow the logo to shrink if space is tight */
+    min-width: 0;   /* permit flexbox to shrink content */
 }
 
 a.logo-cloud,
@@ -301,20 +312,29 @@ a.logo-cloud:active {
   .logo-cloud {
     height: 64px;
     padding: 0.6rem 1.2rem;
+    max-width: 60vw;   /* cap logo width so it doesn't invade right side */
+    overflow: hidden;  /* hide overflow if text gets too long */
   }
-  .logo-text { font-size: 2rem; }
+  .logo-text { font-size: 2rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
   .puff { display: none; }
+  .nav-right { gap: 0.4rem; }
   .hero { padding: 0 4%; }
   .hero h1 { font-size: 2.2rem; }
   .hero p { font-size: 1rem; }
+  .cart-icon { margin-left: auto; } /* push cart to the far right reliably */
 }
 
 @media (max-width: 420px) {
   .logo-cloud {
     height: 56px;
     padding: 0.45rem 1rem;
+    max-width: 58vw;
   }
   .logo-text { font-size: 1.6rem; }
+  .nav-right { gap: 0.35rem; }
+  /* Slightly reduce switcher sizes on very small phones */
+  .curr-btn { min-width: 34px; height: 20px; font-size: 11px; padding: 0 6px; }
+  .lang-btn { width: 26px; height: 20px; font-size: 13px; }
 }
 
 .puff {
@@ -376,6 +396,8 @@ a.logo-cloud:active {
     text-decoration: none;
     color: var(--text-dark);
     transition: transform 0.15s ease, filter 0.2s ease, color 0.2s ease;
+    flex: 0 0 auto; /* prevent cart from shrinking under the logo */
+    z-index: 3; /* ensure it stays clickable above decorative layers */
 }
 
 /* Ensure icon and label inherit current color and never show underline */
