@@ -10,6 +10,32 @@
     --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Shop pager */
+.shop-pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .4rem;
+    margin: 1rem auto 0;
+}
+.shop-pager .pg-btn {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-weight: 700;
+}
+.shop-pager .pg-btn.active {
+    background: var(--baby-blue);
+    color: #fff;
+    border-color: transparent;
+}
+.shop-pager .pg-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
 /* Card thumbnails and sizes */
 .card-size-label { font-size: .9rem; font-weight: 600; margin: .2rem 1.5rem; color: var(--text-dark); }
 .card-sizes { display: flex; gap: .35rem; margin: .2rem 1.5rem .5rem; }
@@ -820,6 +846,7 @@ main h2[data-i18n="shop.title"] {
     gap: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    position: relative; /* allow absolute-positioned hidden items without reflow issues */
 }
 
 .product-card {

@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 basketball: 'Basketball Tee',
                 football: 'Football Tee',
                 official: 'VADA Official Tee',
-                london: 'London T-shirt'
+                london: 'London T-shirt',
+                newyork: 'New York T-shirt'
             },
             button: { add: 'Add to Cart' },
             footer: { quick: 'Quick Links', contact: 'Contact Us', rights: '© 2025 VADA. All rights reserved.', tagline: 'Custom t-shirts made with love' },
@@ -84,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 basketball: 'T‑shirt Koszykówka',
                 football: 'T‑shirt Piłka nożna',
                 official: 'VADA Official T‑shirt',
-                london: 'T‑shirt London'
+                london: 'T‑shirt London',
+                newyork: 'T‑shirt New York'
             },
             button: { add: 'Dodaj do koszyka' },
             footer: { quick: 'Szybkie linki', contact: 'Kontakt', rights: '© 2025 VADA. Wszelkie prawa zastrzeżone.', tagline: 'Koszulki tworzone z sercem' },
@@ -159,6 +161,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 ]
             },
             {
+                titleKey: 'product.newyork',
+                fallback: 'New York T-shirt',
+                usd: 17.5,
+                pln: 70,
+                discount: 10,
+                bg: '#ffffff',
+                cats: ['streetwear', 'official'],
+                images: [
+                    'assets/unisex-heavy-cotton-tee (8).jpg',
+                    'assets/unisex-heavy-cotton-tee (9).jpg',
+                    'assets/unisex-heavy-cotton-tee (10).jpg',
+                    'assets/unisex-heavy-cotton-tee (11).jpg'
+                ]
+            },
+            {
                 titleKey: 'product.olivia',
                 fallback: 'T-Shirt Olivia Rodrigo-GUTS',
                 usd: 17.5, // 70 PLN / 4.0
@@ -189,6 +206,54 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         ];
     }
+
+// Paginate Shop grid into pages of 8 items
+function paginateShopGrid(targetPage = 1, pageSize = 8){
+    const grid = document.querySelector('.product-grid');
+    const pager = document.getElementById('shopPager');
+    if (!grid || !pager) return;
+    const items = Array.from(grid.querySelectorAll('.product-card'))
+        .filter(el => el.style.display !== 'none'); // only visible (respect filters)
+    const total = items.length;
+    const pages = Math.max(1, Math.ceil(total / pageSize));
+    const page = Math.min(Math.max(1, targetPage), pages);
+    // show/hide
+    items.forEach((el, idx) => {
+        const p = Math.floor(idx / pageSize) + 1;
+        el.style.visibility = (p === page) ? 'visible' : 'hidden';
+        el.style.position = (p === page) ? '' : 'absolute';
+        el.style.pointerEvents = (p === page) ? '' : 'none';
+    });
+    // Reflow to avoid overlay when hidden absolute
+    // Create placeholders to keep grid height stable
+    const placeholdersClass = 'pg-ph';
+    grid.querySelectorAll(`.${placeholdersClass}`).forEach(ph => ph.remove());
+    const visibleCount = items.slice((page-1)*pageSize, page*pageSize).length;
+    // If last page has fewer than pageSize, no need to add placeholders because items are hidden absolutely
+    // Build pager UI
+    pager.innerHTML = '';
+    const mkBtn = (label, toPage, disabled=false, active=false) => {
+        const b = document.createElement('button');
+        b.className = 'pg-btn';
+        if (active) b.classList.add('active');
+        if (disabled) b.disabled = true;
+        b.textContent = label;
+        b.addEventListener('click', () => paginateShopGrid(toPage, pageSize));
+        return b;
+    };
+    pager.appendChild(mkBtn('‹', page-1, page<=1));
+    // limit to first 5 pages for buttons, but always include current neighborhood
+    const maxBtns = 5;
+    let start = Math.max(1, page - Math.floor(maxBtns/2));
+    let end = Math.min(pages, start + maxBtns - 1);
+    if (end - start + 1 < maxBtns){ start = Math.max(1, end - maxBtns + 1); }
+    for (let p = start; p <= end; p++){
+        pager.appendChild(mkBtn(String(p), p, false, p===page));
+    }
+    pager.appendChild(mkBtn('›', page+1, page>=pages));
+    // Remember current page on pager element
+    pager.dataset.page = String(page);
+}
 
 // Defensive: fix any legacy image filenames left in DOM (from cached builds)
 function fixLegacyImageFilenames(root=document){
@@ -386,20 +451,31 @@ function fixLegacyImageFilenames(root=document){
     }
 
     // Define: Populate shop page with products if grid exists and is empty (call later)
-    function initShopProducts(){
-        // Only on shop page (filters banner exists only there)
-        if (!document.getElementById('filtersBanner')) return;
-        const grid = document.querySelector('.product-grid');
-        if (!grid) return;
-        if (grid.children.length > 0) return;
-        const items = buildCatalog();
-        const lang = getCurrentLang();
-        const dict = translations[lang] || translations.en;
-        items.forEach(it => renderProductCard(grid, it, dict));
-        // Notify others that products are ready (filters, etc.)
-        try { window.dispatchEvent(new Event('products-ready')); } catch {}
-        // Translations/prices/highlights will be applied after language/currency init
-    }
+function initShopProducts(){
+    // Only on shop page (filters banner exists only there)
+    if (!document.getElementById('filtersBanner')) return;
+    const grid = document.querySelector('.product-grid');
+    if (!grid) return;
+    const items = buildCatalog();
+    const lang = getCurrentLang();
+    const dict = translations[lang] || translations.en;
+    // If grid already has items, append only the missing products (by titleKey)
+    const existingKeys = new Set(Array.from(grid.querySelectorAll('.product-card'))
+        .map(c => c.getAttribute('data-title-key'))
+        .filter(Boolean));
+    items.forEach(it => {
+        if (!existingKeys.has(it.titleKey)) {
+            renderProductCard(grid, it, dict);
+        }
+    });
+    // If grid was empty, existingKeys will be size 0 and everything is rendered
+    // Notify others that products are ready (filters, etc.)
+    try { window.dispatchEvent(new Event('products-ready')); } catch {}
+    // Ensure prices and highlights are correct
+    try { updatePrices(getCurrentLang()); highlightPremiumPricesDOM(); } catch {}
+    // Refresh pagination after render
+    setTimeout(() => paginateShopGrid(1, 8), 0);
+}
     
 
     // Highlight Premium Tee prices on product cards (index/shop) automatically
@@ -654,6 +730,8 @@ function fixLegacyImageFilenames(root=document){
     ensureDefaultCurrency(getCurrentLang());
     // Build products for Shop page after language/currency are ready
     initShopProducts();
+    // Initialize pagination on shop grid (if present)
+    setTimeout(() => paginateShopGrid(1, 8), 0);
     // Render bestsellers on Home page (top 4)
     initHomeBestsellers(4);
     // Ensure prices and premium highlighting reflect current settings
@@ -877,10 +955,11 @@ function fixLegacyImageFilenames(root=document){
 
     // Quick Filters banner toggle (Shop page)
     (function initQuickFilters(){
-        const banner = document.getElementById('filtersBanner');
-        const panel = document.getElementById('filtersQuick');
-        if (!banner || !panel) return;
-        const STORAGE_KEY = 'vada_filters';
+        try {
+            const banner = document.getElementById('filtersBanner');
+            const panel = document.getElementById('filtersQuick');
+            if (!banner || !panel) return;
+            const STORAGE_KEY = 'vada_filters';
         const getChecks = () => Array.from(panel.querySelectorAll('input[type="checkbox"]'));
         // Toggle panel on click/keyboard
         const toggle = () => panel.classList.toggle('show');
@@ -901,6 +980,16 @@ function fixLegacyImageFilenames(root=document){
                 card.style.display = visible ? '' : 'none';
                 if (visible) shown++;
             });
+            // If filters hide everything, auto-clear to prevent confusion
+            if (shown === 0 && active.size > 0) {
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify([])); } catch {}
+                // Uncheck all checkboxes in the quick panel
+                getChecks().forEach(cb => cb.checked = false);
+                // Show all products now
+                cards.forEach(card => { card.style.display = ''; });
+            }
+            // Recalculate pagination to show first page of current filter results
+            paginateShopGrid(1, 8);
         }
         // Load saved filters into checkboxes
         try {
@@ -931,6 +1020,9 @@ function fixLegacyImageFilenames(root=document){
         applyQuickFilters();
         // Re-apply when products are created
         window.addEventListener('products-ready', applyQuickFilters);
+        } catch (err) {
+            try { console.warn('initQuickFilters error (safe to ignore if not on Shop):', err); } catch {}
+        }
     })();
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
