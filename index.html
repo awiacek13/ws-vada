@@ -34,14 +34,19 @@
                 <a href="contact.html" data-i18n="nav.contact">Contact</a>
             </div>
             <div class="nav-right">
-                <div class="currency-switcher" aria-label="Currency Switcher">
-                    <button class="curr-btn" data-curr="USD" title="US Dollar">USD</button>
-                    <button class="curr-btn" data-curr="EUR" title="Euro">EUR</button>
-                    <button class="curr-btn" data-curr="PLN" title="Polski Złoty">PLN</button>
-                </div>
-                <div class="lang-switcher" aria-label="Language Switcher">
-                    <button class="lang-btn" data-lang="pl" title="Polski" aria-label="Polski">🇵🇱</button>
-                    <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇺🇸</button>
+                <!-- Mobile menu button (shows switchers on small screens) -->
+                <button class="menu-toggle" aria-label="Open menu" title="Menu">☰</button>
+                <!-- Switchers group: visible inline on desktop; toggled as a dropdown on mobile -->
+                <div class="switchers" aria-label="Quick settings">
+                    <div class="currency-switcher" aria-label="Currency Switcher">
+                        <button class="curr-btn" data-curr="USD" title="US Dollar">USD</button>
+                        <button class="curr-btn" data-curr="EUR" title="Euro">EUR</button>
+                        <button class="curr-btn" data-curr="PLN" title="Polski Złoty">PLN</button>
+                    </div>
+                    <div class="lang-switcher" aria-label="Language Switcher">
+                        <button class="lang-btn" data-lang="pl" title="Polski" aria-label="Polski">🇵🇱</button>
+                        <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇺🇸</button>
+                    </div>
                 </div>
                 <a href="cart.html" class="cart-icon" aria-label="Cart">
                     <i class="fas fa-shopping-cart"></i>

@@ -737,6 +737,36 @@ function initShopProducts(){
     // Ensure prices and premium highlighting reflect current settings
     updatePrices(getCurrentLang());
     highlightPremiumPricesDOM();
+    // Mobile menu toggle for currency and language switchers
+    (function initMobileMenu(){
+        const menuBtn = document.querySelector('.menu-toggle');
+        const switchers = document.querySelector('.nav-right .switchers');
+        if (!menuBtn || !switchers) return;
+        function close(){
+            switchers.classList.remove('open');
+            try { menuBtn.setAttribute('aria-expanded', 'false'); } catch {}
+        }
+        function open(){
+            switchers.classList.add('open');
+            try { menuBtn.setAttribute('aria-expanded', 'true'); } catch {}
+        }
+        function toggle(){
+            if (switchers.classList.contains('open')) close(); else open();
+        }
+        menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!switchers.classList.contains('open')) return;
+            if (e.target.closest('.switchers') || e.target.closest('.menu-toggle')) return;
+            close();
+        });
+        // Close with Escape
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+        // Close after choosing language or currency
+        document.querySelectorAll('.lang-btn, .curr-btn').forEach(btn => btn.addEventListener('click', () => setTimeout(close, 0)));
+        // Initialize ARIA state
+        try { menuBtn.setAttribute('aria-expanded', 'false'); } catch {}
+    })();
     // Ensure a shared modal exists (if not already placed in HTML)
     (function ensureProductModal(){
         if (!document.getElementById('productModal')){

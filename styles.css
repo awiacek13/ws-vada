@@ -173,6 +173,29 @@ nav {
     align-items: center;
     gap: 0.5rem;
     margin-left: auto; /* push group to the right */
+    position: relative; /* anchor mobile dropdown */
+}
+
+/* Inline switchers container (desktop default) */
+.switchers {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Mobile menu toggle button */
+.menu-toggle {
+    display: none; /* desktop hidden */
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    cursor: pointer;
+    font-size: 18px;
 }
 
 /* Language Switcher */
@@ -318,6 +341,23 @@ a.logo-cloud:active {
   .logo-text { font-size: 2rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
   .puff { display: none; }
   .nav-right { gap: 0.4rem; }
+  /* Show menu button and use dropdown for switchers on mobile */
+  .menu-toggle { display: inline-flex; }
+  .switchers {
+    display: none; /* hidden until opened */
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    padding: 0.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 20;
+  }
+  .switchers.open { display: flex; }
   .hero { padding: 0 4%; }
   .hero h1 { font-size: 2.2rem; }
   .hero p { font-size: 1rem; }
