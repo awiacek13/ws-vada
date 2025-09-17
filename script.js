@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 football: 'Football Tee',
                 official: 'VADA Official Tee',
                 london: 'London T-shirt',
-                newyork: 'New York T-shirt'
+                newyork: 'New York T-shirt',
+                alabama: 'Alabama Black edition T-Shirt'
             },
             button: { add: 'Add to Cart' },
             footer: { quick: 'Quick Links', contact: 'Contact Us', rights: '© 2025 VADA. All rights reserved.', tagline: 'Custom t-shirts made with love' },
@@ -86,7 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 football: 'T‑shirt Piłka nożna',
                 official: 'VADA Official T‑shirt',
                 london: 'T‑shirt London',
-                newyork: 'T‑shirt New York'
+                newyork: 'T‑shirt New York',
+                alabama: 'T‑shirt Alabama Black edition'
             },
             button: { add: 'Dodaj do koszyka' },
             footer: { quick: 'Szybkie linki', contact: 'Kontakt', rights: '© 2025 VADA. Wszelkie prawa zastrzeżone.', tagline: 'Koszulki tworzone z sercem' },
@@ -202,6 +204,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     'assets/kids-heavy-cotton-tee (2).jpg',
                     'assets/kids-heavy-cotton-tee (1).jpg',
                     'assets/kids-heavy-cotton-tee.jpg'
+                ]
+            },
+            {
+                titleKey: 'product.alabama',
+                fallback: 'Alabama Black edition T-Shirt',
+                usd: 17.5,
+                pln: 70,
+                discount: 10,
+                bg: '#111111',
+                cats: ['streetwear'],
+                images: [
+                    'assets/copy-of-unisex-heavy-cotton-tee (1).jpg',
+                    'assets/copy-of-unisex-heavy-cotton-tee (2).jpg',
+                    'assets/copy-of-unisex-heavy-cotton-tee (3).jpg',
+                    'assets/copy-of-unisex-heavy-cotton-tee (4).jpg'
                 ]
             }
         ];
