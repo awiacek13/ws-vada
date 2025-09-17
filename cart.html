@@ -39,19 +39,24 @@
         <a href="shop.html" data-i18n="nav.shop">Shop</a>
         <a href="contact.html" data-i18n="nav.contact">Contact</a>
       </div>
-      <a href="cart.html" class="cart-icon active" aria-label="Cart">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="cart-count">0</span>
-        <span class="cart-label" data-i18n="cart.label">cart</span>
-      </a>
-      <div class="lang-switcher" aria-label="Language Switcher">
-        <button class="lang-btn" data-lang="pl" title="Polski" aria-label="Polski">🇵🇱</button>
-        <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇺🇸</button>
-      </div>
-      <div class="currency-switcher" aria-label="Currency Switcher">
-        <button class="curr-btn" data-curr="USD" title="US Dollar">USD</button>
-        <button class="curr-btn" data-curr="EUR" title="Euro">EUR</button>
-        <button class="curr-btn" data-curr="PLN" title="Polski Złoty">PLN</button>
+      <div class="nav-right">
+        <button class="menu-toggle" aria-label="Open menu" title="Menu">☰</button>
+        <div class="switchers" aria-label="Quick settings">
+          <div class="currency-switcher" aria-label="Currency Switcher">
+            <button class="curr-btn" data-curr="USD" title="US Dollar">USD</button>
+            <button class="curr-btn" data-curr="EUR" title="Euro">EUR</button>
+            <button class="curr-btn" data-curr="PLN" title="Polski Złoty">PLN</button>
+          </div>
+          <div class="lang-switcher" aria-label="Language Switcher">
+            <button class="lang-btn" data-lang="pl" title="Polski" aria-label="Polski">🇵🇱</button>
+            <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇺🇸</button>
+          </div>
+        </div>
+        <a href="cart.html" class="cart-icon active" aria-label="Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+          <span class="cart-label" data-i18n="cart.label">cart</span>
+        </a>
       </div>
     </nav>
   </header>

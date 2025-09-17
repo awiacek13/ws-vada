@@ -161,7 +161,7 @@ nav {
     display: grid;
     grid-template-columns: auto 1fr auto; /* logo | links | right */
     align-items: center;
-    padding: 1.5rem 5%;
+    padding: 1.8rem 5%;
     max-width: 1400px;
     margin: 0 auto;
     gap: 0.75rem;
@@ -219,15 +219,15 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 22px;
+    width: 30px;
+    height: 24px;
     border-radius: 6px;
     border: 1px solid rgba(0,0,0,0.08);
     background: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.2s ease;
-    font-size: 14px; /* for emoji flags */
+    font-size: 15px; /* for emoji flags */
     line-height: 1;
 }
 
@@ -246,16 +246,16 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 36px;
-    height: 22px;
-    padding: 0 6px;
+    min-width: 40px;
+    height: 24px;
+    padding: 0 8px;
     border-radius: 6px;
     border: 1px solid rgba(0,0,0,0.08);
     background: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.2s ease, color 0.2s ease;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1;
 }
 
@@ -301,7 +301,7 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 128px;
+    height: 140px;
     padding: 1.1rem 3.6rem;
     background: linear-gradient(135deg, var(--baby-blue) 0%, var(--baby-pink) 100%);
     border-radius: 999px;
@@ -328,7 +328,7 @@ a.logo-cloud:active {
     font-weight: 800;
     font-family: 'Chewy', 'Luckiest Guy', 'Bubblegum Sans', 'Baloo 2', 'Poppins', system-ui, -apple-system, sans-serif;
     letter-spacing: 0.5px;
-    font-size: 4rem;
+    font-size: 4.5rem;
     text-transform: uppercase;
     text-shadow: 0 2px 0 rgba(0,0,0,0.08), 0 10px 18px rgba(0,0,0,0.12);
     animation: logo_wobble 5s ease-in-out infinite alternate;
@@ -340,14 +340,14 @@ a.logo-cloud:active {
 }
 
 @media (max-width: 768px) {
-  nav { padding: 0.8rem 4%; }
+  nav { padding: 1rem 4%; }
   .logo-cloud {
-    height: 64px;
-    padding: 0.6rem 1.2rem;
+    height: 68px;
+    padding: 0.7rem 1.3rem;
     max-width: 60vw;   /* cap logo width so it doesn't invade right side */
     overflow: hidden;  /* hide overflow if text gets too long */
   }
-  .logo-text { font-size: 2rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+  .logo-text { font-size: 2.2rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
   .puff { display: none; }
   .nav-right { gap: 0.4rem; }
   /* Show menu button and use dropdown for switchers on mobile */
@@ -375,15 +375,15 @@ a.logo-cloud:active {
 
 @media (max-width: 420px) {
   .logo-cloud {
-    height: 56px;
-    padding: 0.45rem 1rem;
+    height: 58px;
+    padding: 0.5rem 1.05rem;
     max-width: 58vw;
   }
-  .logo-text { font-size: 1.6rem; }
-  .nav-right { gap: 0.35rem; }
-  /* Slightly reduce switcher sizes on very small phones */
-  .curr-btn { min-width: 34px; height: 20px; font-size: 11px; padding: 0 6px; }
-  .lang-btn { width: 26px; height: 20px; font-size: 13px; }
+  .logo-text { font-size: 1.75rem; }
+  .nav-right { gap: 0.4rem; }
+  /* Slightly larger than before for readability */
+  .curr-btn { min-width: 36px; height: 22px; font-size: 12px; padding: 0 6px; }
+  .lang-btn { width: 28px; height: 22px; font-size: 14px; }
 }
 
 .puff {
@@ -409,6 +409,7 @@ a.logo-cloud:active {
     text-decoration: none;
     margin: 0 1.2rem;
     font-weight: 500;
+    font-size: 1.1rem;
     transition: color 0.3s ease;
     position: relative;
 }
@@ -436,7 +437,7 @@ a.logo-cloud:active {
 
 .cart-icon {
     position: relative;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
     display: inline-flex;
     flex-direction: column;
@@ -695,6 +696,21 @@ main h2[data-i18n="shop.title"] {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Make cart list scrollable within viewport */
+.cart-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Leave room for fixed header and some spacing: adjust if header height changes */
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 6px; /* avoid scrollbar overlaying content */
+}
+
+@media (max-width: 768px) {
+  .cart-container { max-height: calc(100vh - 200px); }
 }
 
 .cart-table .cart-head {
