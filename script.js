@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'assets/copy-of-unisex-heavy-cotton-tee (1).jpg',
                     'assets/copy-of-unisex-heavy-cotton-tee (2).jpg',
                     'assets/copy-of-unisex-heavy-cotton-tee (3).jpg',
-                    'assets/copy-of-unisex-heavy-cotton-tee (4).jpg'
+                    'assets/copy-of-unisex-heavy-cotton-tee.jpg'
                 ]
             }
         ];
