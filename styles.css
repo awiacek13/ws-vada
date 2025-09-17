@@ -159,7 +159,7 @@ header {
 
 nav {
     display: grid;
-    grid-template-columns: auto 1fr auto; /* logo | links | right */
+    grid-template-columns: auto 1fr auto; /* default; overridden on desktop for stability */
     align-items: center;
     padding: 1.8rem 5%;
     max-width: 1400px;
@@ -309,8 +309,16 @@ nav {
     overflow: visible;
     text-decoration: none;
     color: inherit;
-    flex: 0 1 auto; /* allow the logo to shrink if space is tight */
-    min-width: 0;   /* permit flexbox to shrink content */
+    flex: 0 0 auto; /* do not allow shrinking */
+    min-width: max-content;   /* keep logo pill from compressing in grid */
+}
+
+/* Desktop-only: lock header measurements for pixel-perfect consistency */
+@media (min-width: 769px) {
+  nav { grid-template-columns: max-content 1fr max-content; }
+  .logo-cloud { width: 360px; }
+  .nav-right { white-space: nowrap; }
+  .logo-text { font-size: 72px; } /* 4.5rem equivalent, but fixed for consistency */
 }
 
 a.logo-cloud,

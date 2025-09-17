@@ -1,9 +1,22 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WS VADA</title>
+  <!-- Preconnects to stabilize webfont loading and reduce FOUT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Critical CSS: lock header sizes on first paint (desktop) to keep pages identical -->
+  <style>
+    @media (min-width: 769px){
+      header{ min-height: 140px; }
+      nav{ display:grid; grid-template-columns:max-content 1fr max-content; align-items:center; }
+      .logo-cloud{ width:360px; height:140px; }
+      .logo-text{ font-size:72px; }
+      .curr-btn, .lang-btn{ box-sizing:border-box; height:24px; line-height:24px; }
+    }
+  </style>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23a7c7e7'/%3E%3Ctext x='32' y='38' font-size='26' text-anchor='middle' fill='white' font-family='Arial, sans-serif'%3EV%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">

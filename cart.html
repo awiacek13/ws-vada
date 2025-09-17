@@ -4,6 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WS VADA</title>
+  <!-- Preconnects to stabilize webfont loading and reduce FOUT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Critical CSS: lock header sizes on first paint (desktop) to keep pages identical -->
+  <style>
+    @media (min-width: 769px){
+      header{ min-height: 140px; }
+      nav{ display:grid; grid-template-columns:max-content 1fr max-content; align-items:center; }
+      .logo-cloud{ width:360px; height:140px; }
+      .logo-text{ font-size:72px; }
+      .curr-btn, .lang-btn{ box-sizing:border-box; height:24px; line-height:24px; }
+    }
+  </style>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
