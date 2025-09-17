@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 premium: 'Premium Tee',
 
                 music: 'Music Tee',
-                metalica: 'Metalica T-shirt',
+                metalica: 'Metallica T-shirt',
                 olivia: 'T-Shirt Olivia Rodrigo-GUTS',
                 minecraft: 'Minecraft kids T-shirt',
                 meme: 'Meme Tee',
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return [
             {
                 titleKey: 'product.metalica',
-                fallback: 'Metalica T-shirt',
+                fallback: 'Metallica T-shirt',
                 usd: 17.5,
                 pln: 70,
                 discount: 10,
