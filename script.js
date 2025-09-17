@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             nav: { home: 'Start', shop: 'Sklep', contact: 'Kontakt' },
             hero: {
                 title: 'Koszulki tworzone specjalnie dla Ciebie',
-                subtitle: 'Koszulki tworzone z serca',
+                subtitle: 'koszulki tworzone z sercem',
                 cta: 'Do sklepu'
             },
             featured: { title: 'Bestsellery' },
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 , metallica_kids: 'T‑shirt Metallica (dziecięcy)'
             },
             button: { add: 'Dodaj do koszyka' },
-            footer: { quick: 'Szybkie linki', contact: 'Kontakt', rights: '© 2025 VADA. Wszelkie prawa zastrzeżone.', tagline: 'Koszulki tworzone z sercem' },
+            footer: { quick: 'Szybkie linki', contact: 'Kontakt', rights: '© 2025 VADA. Wszelkie prawa zastrzeżone.', tagline: 'koszulki tworzone z sercem' },
             shop: { title: 'Sklep' },
             filters: {
                 button: 'Filtry',
