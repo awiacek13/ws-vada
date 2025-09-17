@@ -158,13 +158,13 @@ header {
 }
 
 nav {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* logo | links | right */
     align-items: center;
     padding: 1.5rem 5%;
     max-width: 1400px;
     margin: 0 auto;
-    gap: 0.75rem; /* add small gap so items don't touch when shrinking */
+    gap: 0.75rem;
 }
 
 /* Right-side group: currency + language + cart */
@@ -172,8 +172,17 @@ nav {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    margin-left: auto; /* push group to the right */
+    justify-self: end; /* stick to the right column */
     position: relative; /* anchor mobile dropdown */
+}
+
+/* Center nav links in the middle column */
+.nav-links {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
 }
 
 /* Inline switchers container (desktop default) */
