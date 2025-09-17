@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 london: 'London T-shirt',
                 newyork: 'New York T-shirt',
                 alabama: 'Alabama Black edition T-Shirt'
+                , metallica_kids: 'Metallica kids T-shirt'
             },
             button: { add: 'Add to Cart' },
             footer: { quick: 'Quick Links', contact: 'Contact Us', rights: '© 2025 VADA. All rights reserved.', tagline: 'Custom t-shirts made with love' },
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 london: 'T‑shirt London',
                 newyork: 'T‑shirt New York',
                 alabama: 'T‑shirt Alabama Black edition'
+                , metallica_kids: 'T‑shirt Metallica (dziecięcy)'
             },
             button: { add: 'Dodaj do koszyka' },
             footer: { quick: 'Szybkie linki', contact: 'Kontakt', rights: '© 2025 VADA. Wszelkie prawa zastrzeżone.', tagline: 'Koszulki tworzone z sercem' },
@@ -140,6 +142,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 discount: 10,
                 bg: '#f3f6ff',
                 cats: ['music'],
+                images: [
+                    'assets/unisex-heavy-cotton-tee (4).jpg',
+                    'assets/unisex-heavy-cotton-tee (5).jpg',
+                    'assets/unisex-heavy-cotton-tee (6).jpg',
+                    'assets/unisex-heavy-cotton-tee (7).jpg'
+                ]
+            },
+            {
+                titleKey: 'product.metallica_kids',
+                fallback: 'Metallica kids T-shirt',
+                usd: 17.5,
+                pln: 70,
+                discount: 10,
+                bg: '#f3f6ff',
+                cats: ['music','kids'],
                 images: [
                     'assets/unisex-heavy-cotton-tee (4).jpg',
                     'assets/unisex-heavy-cotton-tee (5).jpg',
