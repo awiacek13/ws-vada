@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 premium: 'T‑shirt Premium',
                 vneck: 'T‑shirt V‑neck',
                 music: 'T‑shirt Muzyka',
-                metalica: 'T‑shirt Metalica',
+                metalica: 'T‑shirt Metallica',
                 olivia: 'T‑shirt Olivia Rodrigo – GUTS',
                 minecraft: 'Minecraft dziecięcy T‑shirt',
                 meme: 'T‑shirt Meme',
