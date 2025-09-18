@@ -328,7 +328,7 @@ function fixLegacyImageFilenames(root=document){
             return src;
         });
     }
-
+    
     // Reusable card renderer
     function renderProductCard(grid, it, dict){
         const card = document.createElement('div');
@@ -394,6 +394,21 @@ function fixLegacyImageFilenames(root=document){
                         th.addEventListener('click', (ev)=>{ ev.stopPropagation(); imgDiv.style.backgroundImage = `url('${src}')`; });
                         thumbsWrap.appendChild(th);
                     });
+                    // Hover auto-cycling of card image (desktop), with reset on leave
+                    if (loaded.length > 1){
+                        let i = 0;
+                        let t = null;
+                        const apply = () => { imgDiv.style.backgroundImage = `url('${loaded[i]}')`; };
+                        const start = () => {
+                            if (t) return;
+                            t = setInterval(() => { i = (i+1) % loaded.length; apply(); }, 1400);
+                        };
+                        const stop = () => { if (t){ clearInterval(t); t = null; } i = 0; apply(); };
+                        imgDiv.addEventListener('mouseenter', start);
+                        imgDiv.addEventListener('mouseleave', stop);
+                        // For touch: tap to advance once
+                        imgDiv.addEventListener('click', (ev)=>{ ev.stopPropagation(); i = (i+1) % loaded.length; apply(); });
+                    }
                 } catch {}
             }
         })();
