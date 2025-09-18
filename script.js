@@ -224,6 +224,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 ]
             },
             {
+                titleKey: 'product.meme',
+                fallback: 'Meme Tee',
+                usd: 17.5,
+                pln: 70,
+                discount: 10,
+                bg: '#ffffff',
+                cats: ['meme'],
+                images: [
+                    'assets/unisex-heavy-cotton-tee (12).jpg',
+                    'assets/unisex-heavy-cotton-tee (13).jpg',
+                    'assets/unisex-heavy-cotton-tee (14).jpg',
+                    'assets/unisex-heavy-cotton-tee (15).jpg'
+                ]
+            },
+            {
                 titleKey: 'product.alabama',
                 fallback: 'Alabama Black edition T-Shirt',
                 usd: 17.5,
