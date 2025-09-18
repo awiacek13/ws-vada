@@ -882,7 +882,6 @@ function initShopProducts(){
         thumbs.innerHTML = '';
         // Prefer per-product images from data-images (validate with preload to avoid 404s)
         const images = normalizeImageList((() => { try { return JSON.parse(card.getAttribute('data-images')||'[]'); } catch { return []; } })());
-        const validImages = [];
         async function preload(src){
             return new Promise(resolve => {
                 const im = new Image();
@@ -895,41 +894,72 @@ function initShopProducts(){
             if (Array.isArray(images) && images.length) {
                 const loaded = (await Promise.all(images.map(preload))).filter(Boolean);
                 if (loaded.length) {
-                    const cover = loaded[0] || loaded[1];
-                    mimg.style.backgroundImage = `url('${cover}')`;
+                    // Configure main image box
                     mimg.style.background = '';
                     mimg.style.backgroundSize = 'cover';
                     mimg.style.backgroundPosition = 'center';
-                    loaded.forEach(src => {
+                    mimg.style.position = 'relative';
+                    // Remove previous controls if any (reopening modal)
+                    mimg.querySelectorAll('.mctrl').forEach(el => el.remove());
+
+                    // Build thumbnails with active state
+                    thumbs.innerHTML = '';
+                    let current = 0;
+                    const apply = (i) => {
+                        current = ((i % loaded.length) + loaded.length) % loaded.length;
+                        mimg.style.backgroundImage = `url('${loaded[current]}')`;
+                        thumbs.querySelectorAll('.thumb').forEach((b, idx) => {
+                            b.classList.toggle('active', idx === current);
+                            b.style.outline = idx === current ? '2px solid var(--baby-blue)' : '';
+                            b.style.outlineOffset = '2px';
+                        });
+                    };
+                    loaded.forEach((src, idx) => {
                         const th = document.createElement('button');
                         th.className = 'thumb';
                         th.type = 'button';
                         th.style.backgroundImage = `url('${src}')`;
                         th.style.backgroundSize = 'cover';
                         th.style.backgroundPosition = 'center';
-                        th.addEventListener('click', () => {
-                            mimg.style.backgroundImage = `url('${src}')`;
-                            mimg.style.background = '';
-                        });
+                        th.addEventListener('click', () => apply(idx));
                         thumbs.appendChild(th);
                     });
-                    return;
+                    apply(0);
+
+                    // Controls
+                    const mkCtrl = (cls, label, side, onClick) => {
+                        const b = document.createElement('button');
+                        b.className = `mctrl ${cls}`;
+                        b.type = 'button';
+                        b.textContent = label;
+                        b.style.position = 'absolute';
+                        b.style.top = '50%';
+                        b.style.transform = 'translateY(-50%)';
+                        b.style[side] = '8px';
+                        b.style.padding = '6px 10px';
+                        b.style.borderRadius = '10px';
+                        b.style.border = '1px solid rgba(0,0,0,0.15)';
+                        b.style.background = 'rgba(255,255,255,0.85)';
+                        b.style.cursor = 'pointer';
+                        b.style.fontSize = '16px';
+                        b.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
+                        b.addEventListener('click', (e)=>{ e.stopPropagation(); onClick(); });
+                        return b;
+                    };
+                    const prev = mkCtrl('prev','‹','left', () => apply(current-1));
+                    const next = mkCtrl('next','›','right', () => apply(current+1));
+                    mimg.appendChild(prev);
+                    mimg.appendChild(next);
+
+                    // Keyboard support while open
+                    const keyHandler = (e) => {
+                        if (modal.style.display === 'none') { document.removeEventListener('keydown', keyHandler); return; }
+                        if (e.key === 'ArrowLeft') apply(current-1);
+                        if (e.key === 'ArrowRight') apply(current+1);
+                    };
+                    document.addEventListener('keydown', keyHandler);
                 }
             }
-            // Fallback: use current card background styles
-            const baseColor = img ? (img.style.backgroundColor || '#f3f6ff') : '#f3f6ff';
-            mimg.style.background = baseColor;
-            const variants = [baseColor, 'linear-gradient(135deg, var(--baby-blue), var(--baby-pink))', '#eef6ff'];
-            variants.forEach((bg) => {
-                const th = document.createElement('button');
-                th.className = 'thumb';
-                th.type = 'button';
-                if (bg.startsWith('linear-gradient')) th.style.backgroundImage = bg; else th.style.background = bg;
-                th.addEventListener('click', () => {
-                    if (bg.startsWith('linear-gradient')) { mimg.style.backgroundImage = bg; mimg.style.background = '';} else { mimg.style.background = bg; mimg.style.backgroundImage = ''; }
-                });
-                thumbs.appendChild(th);
-            });
         })();
         // Sizes: clicking cover toggles size chooser; default M
         const sizes = modal.querySelector('.modal-sizes');
