@@ -489,7 +489,9 @@ function fixLegacyImageFilenames(root=document){
         // Make the whole card clickable except the Add to Cart button
         card.addEventListener('click', (e) => {
             if (e.target.closest('.add-to-cart')) return;
-            openProductModalFromCard(card);
+            const key = card.getAttribute('data-title-key') || '';
+            const url = `product.html?key=${encodeURIComponent(key)}`;
+            window.open(url, '_blank');
         });
         return card;
     }
@@ -1060,6 +1062,78 @@ function initShopProducts(){
         }
     });
     document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeProductModal(); });
+
+    // Product detail page renderer (new tab)
+    (function initProductDetailPage(){
+        const mount = document.getElementById('productDetail');
+        if (!mount) return;
+        // Get key from URL
+        const params = new URLSearchParams(window.location.search);
+        const key = params.get('key');
+        const catalog = buildCatalog();
+        const item = catalog.find(it => it.titleKey === key) || catalog[0];
+        const lang = getCurrentLang();
+        const dict = translations[lang] || translations.en;
+
+        // Build DOM
+        const wrap = document.createElement('div');
+        wrap.className = 'product-detail';
+        wrap.style.display = 'grid';
+        wrap.style.gridTemplateColumns = '1.2fr 1fr';
+        wrap.style.gap = '1rem';
+        wrap.innerHTML = `
+            <div class="pd-left">
+                <div class="modal-image" id="pdImage"></div>
+                <div class="modal-thumbs" id="pdThumbs"></div>
+            </div>
+            <div class="pd-right">
+                <h3 class="modal-title">${getNested(dict, item.titleKey) || item.fallback}</h3>
+                <div class="modal-price" id="pdPrice" data-price-usd="${item.usd}" ${item.discount?`data-discount="${item.discount}"`:''}>$${Number(item.usd).toFixed(2)}</div>
+                <p class="modal-lowest"><span class="lowest-price"></span></p>
+                <div class="modal-size-label" data-i18n="modal.choose_size">${(translations[getCurrentLang()]?.modal?.choose_size) || 'Choose size'}</div>
+                <div class="modal-sizes" id="pdSizes">
+                    <button class="size-btn" data-size="S">S</button>
+                    <button class="size-btn" data-size="M">M</button>
+                    <button class="size-btn" data-size="L">L</button>
+                    <button class="size-btn" data-size="XL">XL</button>
+                </div>
+                <button class="modal-add" type="button" id="pdAdd" data-i18n="button.add">${getNested(dict,'button.add')||'Add to Cart'}</button>
+            </div>
+        `;
+        mount.appendChild(wrap);
+
+        // Gallery like modal
+        const mimg = wrap.querySelector('#pdImage');
+        const thumbs = wrap.querySelector('#pdThumbs');
+        const imgs = Array.isArray(item.images) ? item.images.slice() : [];
+        function preload(src){ return new Promise(res=>{ const im=new Image(); im.onload=()=>res(src); im.onerror=()=>res(null); im.src=src; }); }
+        (async ()=>{
+            const loaded = (await Promise.all(imgs.map(preload))).filter(Boolean);
+            if (!loaded.length){ mimg.style.background = item.bg || '#f3f6ff'; return; }
+            let current = 0; const apply = (i)=>{ current=((i%loaded.length)+loaded.length)%loaded.length; mimg.style.backgroundImage = `url('${loaded[current]}')`; };
+            apply(0);
+            loaded.forEach((src, idx)=>{ const th=document.createElement('button'); th.className='thumb'; th.type='button'; th.style.backgroundImage=`url('${src}')`; th.addEventListener('click',()=>apply(idx)); thumbs.appendChild(th); });
+        })();
+
+        // Sizes
+        const sizes = wrap.querySelector('#pdSizes');
+        wrap.dataset.size = 'M';
+        const upd = ()=> sizes.querySelectorAll('.size-btn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-size')===wrap.dataset.size));
+        upd();
+        sizes.addEventListener('click', (ev)=>{ const btn=ev.target.closest('.size-btn'); if(!btn) return; wrap.dataset.size = btn.getAttribute('data-size')||'M'; upd(); });
+
+        // Price formatting
+        try { updatePrices(getCurrentLang()); } catch {}
+        const lowestP = wrap.querySelector('.lowest-price');
+        const priceEl = wrap.querySelector('#pdPrice');
+        if (lowestP && priceEl) lowestP.textContent = priceEl.getAttribute('data-lowest30') || '';
+
+        // Add to cart
+        wrap.querySelector('#pdAdd').addEventListener('click', ()=>{
+            const name = `${getNested(dict, item.titleKey) || item.fallback} (${wrap.dataset.size||'M'})`;
+            addItemToCart(name, item.usd || 0);
+        });
+    })();
     // Currency switcher
     document.querySelectorAll('.curr-btn[data-curr]').forEach(btn => {
         btn.addEventListener('click', () => {
