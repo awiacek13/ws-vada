@@ -1079,7 +1079,7 @@ function initShopProducts(){
         const wrap = document.createElement('div');
         wrap.className = 'product-detail';
         wrap.style.display = 'grid';
-        wrap.style.gridTemplateColumns = '1.2fr 1fr';
+        wrap.style.gridTemplateColumns = '1fr 1fr';
         wrap.style.gap = '1rem';
         wrap.innerHTML = `
             <div class="pd-left">
