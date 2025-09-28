@@ -173,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 bg: '#ffffff',
                 cats: ['streetwear'],
                 images: [
-                    'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (3).jpg',
                     'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear.jpg',
+                    'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (3).jpg',
                     'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (1).jpg',
                     'assets/london-inspired-unisex-heavy-cotton-tee-travel-gift-city-lover-shirt-london-souvenir-casual-wear (2).jpg'
                 ]
