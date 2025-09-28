@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Build the product catalog once, to reuse across pages
     function buildCatalog(){
-        return [
+        const base = [
             {
                 titleKey: 'product.metalica',
                 fallback: 'Metallica T-shirt',
@@ -254,6 +254,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 ]
             }
         ];
+        // Auto-create kids variants for all non-kids products
+        function makeKidsName(name){
+            const n = String(name||'').trim();
+            const lower = n.toLowerCase();
+            if (lower.includes('kids')) return n; // already kids
+            if (/(^|\s)tee\b/i.test(n)) return n.replace(/\bTee\b/i, 'kids Tee');
+            if (/t[- ]?shirt/i.test(n)) return n.replace(/T[- ]?shirt/i, 'kids T-shirt');
+            return n + ' kids';
+        }
+        function cloneKids(it){
+            // Skip if already a kids product
+            const name = it.fallback || getNested((translations[getCurrentLang()]||translations.en), it.titleKey) || 'T-shirt';
+            const isKids = (Array.isArray(it.cats) && it.cats.includes('kids')) || /kids/i.test(name);
+            if (isKids) return null;
+            return {
+                titleKey: (it.titleKey ? it.titleKey + '_kids_auto' : ''),
+                fallback: makeKidsName(name),
+                usd: it.usd,
+                pln: it.pln,
+                discount: it.discount,
+                bg: it.bg,
+                cats: Array.from(new Set([...(it.cats||[]), 'kids'])),
+                images: Array.isArray(it.images) ? it.images.slice() : []
+            };
+        }
+        const autoKids = base.map(cloneKids).filter(Boolean);
+        return base.concat(autoKids);
     }
 
 // Paginate Shop grid into pages of 8 items
