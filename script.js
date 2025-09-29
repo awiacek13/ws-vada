@@ -268,6 +268,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = it.fallback || getNested((translations[getCurrentLang()]||translations.en), it.titleKey) || 'T-shirt';
             const isKids = (Array.isArray(it.cats) && it.cats.includes('kids')) || /kids/i.test(name);
             if (isKids) return null;
+            const candidateName = makeKidsName(name).toLowerCase();
+            // If base already contains a kids product with this name, skip to avoid duplicates (e.g., Metallica kids)
+            const existingKidsNames = new Set(base
+                .filter(b => (Array.isArray(b.cats) && b.cats.includes('kids')) || /kids/i.test(String(b.fallback||'')))
+                .map(b => String(b.fallback||'').toLowerCase()));
+            if (existingKidsNames.has(candidateName)) return null;
             return {
                 titleKey: (it.titleKey ? it.titleKey + '_kids_auto' : ''),
                 fallback: makeKidsName(name),
@@ -622,11 +628,15 @@ function initShopProducts(){
         function applyFilters(){
             const vals = loadFilters();
             const active = new Set(vals);
+            const mode = (localStorage.getItem('vada_age') || '').toLowerCase(); // '', 'kids', 'adults'
             let shown = 0;
             products().forEach(p => {
                 const cats = (p.getAttribute('data-cats') || '').split(',').map(s => s.trim()).filter(Boolean);
-                const has = active.size === 0 ? true : cats.some(c => active.has(c));
-                p.style.display = has ? '' : 'none';
+                const hasCat = active.size === 0 ? true : cats.some(c => active.has(c));
+                const isKids = cats.includes('kids');
+                const ageOk = mode === '' ? true : (mode === 'kids' ? isKids : !isKids);
+                const visible = hasCat && ageOk;
+                p.style.display = visible ? '' : 'none';
                 if (has) shown++;
             });
             setMatchCount(shown);
@@ -1197,11 +1207,15 @@ function initShopProducts(){
             let saved = [];
             try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch {}
             const active = new Set(saved);
+            const mode = (localStorage.getItem('vada_age') || '').toLowerCase(); // '', 'kids', 'adults'
             const cards = document.querySelectorAll('.product-grid .product-card');
             let shown = 0;
             cards.forEach(card => {
                 const cats = (card.getAttribute('data-cats') || '').split(',').map(s=>s.trim()).filter(Boolean);
-                const visible = active.size === 0 ? true : cats.some(c => active.has(c));
+                const matchCat = active.size === 0 ? true : cats.some(c => active.has(c));
+                const isKids = cats.includes('kids');
+                const ageOk = mode === '' ? true : (mode === 'kids' ? isKids : !isKids);
+                const visible = matchCat && ageOk;
                 card.style.display = visible ? '' : 'none';
                 if (visible) shown++;
             });
@@ -1248,6 +1262,48 @@ function initShopProducts(){
         } catch (err) {
             try { console.warn('initQuickFilters error (safe to ignore if not on Shop):', err); } catch {}
         }
+    })();
+
+    // Shop Age Toggle (12- kids, 12+ non-kids)
+    (function initAgeToggle(){
+        try {
+            const wrap = document.querySelector('.shop-controls');
+            if (!wrap) return;
+            wrap.innerHTML = '';
+            const mk = (label, val) => { const b=document.createElement('button'); b.className='curr-btn'; b.textContent=label; b.dataset.age=val; return b; };
+            const bKids = mk('12-','kids');
+            const bAdults = mk('12+','adults');
+            wrap.appendChild(bKids); wrap.appendChild(bAdults);
+            const sync = () => {
+                const mode = (localStorage.getItem('vada_age')||'').toLowerCase();
+                [bKids,bAdults].forEach(b=> b.classList.toggle('active', b.dataset.age===mode));
+                // Re-apply both filter systems and pagination
+                try { const evt = new Event('products-ready'); window.dispatchEvent(evt); } catch {}
+                try {
+                    // If classic filters panel exists, force it to recompute
+                    const panel = document.getElementById('filtersPanel');
+                    if (panel) {
+                        // call applyFilters indirectly by toggling save event
+                        const e = new Event('click');
+                        const dummy = document.getElementById('saveFilters');
+                        if (dummy) dummy.dispatchEvent(e);
+                    }
+                } catch {}
+                // Also update pager to page 1
+                setTimeout(()=> paginateShopGrid(1,8), 0);
+            };
+            wrap.addEventListener('click', (ev)=>{
+                const b = ev.target.closest('button.curr-btn');
+                if (!b) return;
+                const v = b.dataset.age;
+                const curr = (localStorage.getItem('vada_age')||'');
+                const next = (curr===v) ? '' : v; // clicking again clears
+                localStorage.setItem('vada_age', next);
+                sync();
+            });
+            // initialize active state
+            sync();
+        } catch {}
     })();
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
